@@ -715,8 +715,8 @@ footer {
 
 /* Dark mode adjustments for activity tags */
 [data-theme="dark"] .activity-tag {
-  background: #2d3748;
-  color: #e2e8f0;
+  background: var(--border);
+  color: var(--text-primary);
 }
 
 /* Dark mode adjustments for skeleton cards */
@@ -731,8 +731,8 @@ footer {
 
 /* Dark mode adjustments for tooltips */
 [data-theme="dark"] .tooltip .tooltip-text {
-  background-color: rgba(255, 255, 255, 0.9);
-  color: #000;
+  background-color: var(--surface);
+  color: var(--text-primary);
 }
 
 /* Dark mode adjustments for capacity bar */
