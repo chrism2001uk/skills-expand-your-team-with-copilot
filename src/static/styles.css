@@ -224,6 +224,70 @@ section h3 {
   justify-content: center;
 }
 
+/* Social Share Buttons */
+.share-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-light);
+}
+
+.share-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.share-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.share-button:hover {
+  transform: scale(1.1);
+}
+
+.share-icon {
+  font-weight: bold;
+}
+
+.share-facebook {
+  background-color: #1877f2;
+  color: white;
+}
+
+.share-facebook:hover {
+  background-color: #0d65d9;
+}
+
+.share-twitter {
+  background-color: #000000;
+  color: white;
+}
+
+.share-twitter:hover {
+  background-color: #333333;
+}
+
+.share-email {
+  background-color: var(--primary);
+  color: white;
+}
+
+.share-email:hover {
+  background-color: var(--primary-light);
+}
+
 /* Activity Tag */
 .activity-tag {
   position: absolute;
@@ -573,7 +637,8 @@ footer {
 
 .category-filters,
 .day-filters,
-.time-filters {
+.time-filters,
+.difficulty-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -581,7 +646,8 @@ footer {
 
 .category-filter,
 .day-filter,
-.time-filter {
+.time-filter,
+.difficulty-filter {
   background-color: var(--background);
   border: 1px solid var(--border);
   color: var(--text-primary);
@@ -594,7 +660,8 @@ footer {
 
 .category-filter.active,
 .day-filter.active,
-.time-filter.active {
+.time-filter.active,
+.difficulty-filter.active {
   background-color: var(--primary);
   color: white;
   border-color: var(--primary-dark);
@@ -602,12 +669,14 @@ footer {
 
 .category-filter:hover,
 .day-filter:hover,
-.time-filter:hover {
+.time-filter:hover,
+.difficulty-filter:hover {
   background-color: var(--primary-light);
   color: white;
 }
 
-.time-filters {
+.time-filters,
+.difficulty-filters {
   width: 100%;
 }
 
@@ -738,4 +807,30 @@ footer {
 /* Dark mode adjustments for capacity bar */
 [data-theme="dark"] .capacity-bar-fill {
   opacity: 0.9;
+/* Difficulty Badge */
+.difficulty-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 0.65rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.difficulty-beginner {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.difficulty-intermediate {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.difficulty-advanced {
+  background-color: #ffebee;
+  color: #c62828;
 }

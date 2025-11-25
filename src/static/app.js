@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoryFilters = document.querySelectorAll(".category-filter");
   const dayFilters = document.querySelectorAll(".day-filter");
   const timeFilters = document.querySelectorAll(".time-filter");
+  const difficultyFilters = document.querySelectorAll(".difficulty-filter");
 
   // Authentication elements
   const loginButton = document.getElementById("login-button");
@@ -77,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let searchQuery = "";
   let currentDay = "";
   let currentTimeRange = "";
+  let currentDifficulty = "";
 
   // Authentication state
   let currentUser = null;
@@ -100,6 +102,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const activeTimeFilter = document.querySelector(".time-filter.active");
     if (activeTimeFilter) {
       currentTimeRange = activeTimeFilter.dataset.time;
+    }
+
+    // Initialize difficulty filter
+    const activeDifficultyFilter = document.querySelector(".difficulty-filter.active");
+    if (activeDifficultyFilter) {
+      currentDifficulty = activeDifficultyFilter.dataset.difficulty;
     }
   }
 
@@ -126,6 +134,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update active class
     timeFilters.forEach((btn) => {
       if (btn.dataset.time === timeRange) {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+      }
+    });
+
+    fetchActivities();
+  }
+
+  // Function to set difficulty filter
+  function setDifficultyFilter(difficulty) {
+    currentDifficulty = difficulty;
+
+    // Update active class
+    difficultyFilters.forEach((btn) => {
+      if (btn.dataset.difficulty === difficulty) {
         btn.classList.add("active");
       } else {
         btn.classList.remove("active");
@@ -315,6 +339,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Generate share URLs for social platforms
+  function getShareUrl(platform, activityName, description) {
+    const pageUrl = window.location.href;
+    const shareText = `Check out the ${activityName} activity at Mergington High School! ${description}`;
+    const encodedUrl = encodeURIComponent(pageUrl);
+    const encodedText = encodeURIComponent(shareText);
+
+    switch (platform) {
+      case "facebook":
+        return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+      case "twitter":
+        return `https://x.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`;
+      case "email":
+        return `mailto:?subject=${encodeURIComponent(
+          `${activityName} at Mergington High School`
+        )}&body=${encodedText}%0A%0A${encodedUrl}`;
+      default:
+        return "#";
+    }
+  }
+
   // Format schedule for display - handles both old and new format
   function formatSchedule(details) {
     // If schedule_details is available, use the structured data
@@ -400,7 +445,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return "academic";
   }
 
-  // Function to fetch activities from API with optional day and time filters
+  // Function to fetch activities from API with optional day, time, and difficulty filters
   async function fetchActivities() {
     // Show loading skeletons first
     showLoadingSkeletons();
@@ -427,6 +472,11 @@ document.addEventListener("DOMContentLoaded", () => {
           queryParams.push(`start_time=${encodeURIComponent(range.start)}`);
           queryParams.push(`end_time=${encodeURIComponent(range.end)}`);
         }
+      }
+
+      // Handle difficulty filter
+      if (currentDifficulty) {
+        queryParams.push(`difficulty=${encodeURIComponent(currentDifficulty)}`);
       }
 
       const queryString =
@@ -543,6 +593,11 @@ document.addEventListener("DOMContentLoaded", () => {
       </span>
     `;
 
+    // Create difficulty badge (only if difficulty is specified)
+    const difficultyBadge = details.difficulty
+      ? `<span class="difficulty-badge difficulty-${details.difficulty.toLowerCase()}">${details.difficulty}</span>`
+      : "";
+
     // Create capacity indicator
     const capacityIndicator = `
       <div class="capacity-container ${capacityStatusClass}">
@@ -558,6 +613,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     activityCard.innerHTML = `
       ${tagHtml}
+      ${difficultyBadge}
       <h4>${name}</h4>
       <p>${details.description}</p>
       <p class="tooltip">
@@ -605,6 +661,28 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         `
         }
+      </div>
+      <div class="share-buttons">
+        <span class="share-label">Share:</span>
+        <a href="${getShareUrl("facebook", name, details.description)}" 
+           class="share-button share-facebook" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           title="Share on Facebook">
+          <span class="share-icon">f</span>
+        </a>
+        <a href="${getShareUrl("twitter", name, details.description)}" 
+           class="share-button share-twitter" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           title="Share on X (Twitter)">
+          <span class="share-icon">𝕏</span>
+        </a>
+        <a href="${getShareUrl("email", name, details.description)}" 
+           class="share-button share-email"
+           title="Share via Email">
+          <span class="share-icon">✉</span>
+        </a>
       </div>
     `;
 
@@ -674,6 +752,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Update current time filter and fetch activities
       currentTimeRange = button.dataset.time;
+      fetchActivities();
+    });
+  });
+
+  // Add event listeners for difficulty filter buttons
+  difficultyFilters.forEach((button) => {
+    button.addEventListener("click", () => {
+      // Update active class
+      difficultyFilters.forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+
+      // Update current difficulty filter and fetch activities
+      currentDifficulty = button.dataset.difficulty;
       fetchActivities();
     });
   });
@@ -896,6 +987,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.activityFilters = {
     setDayFilter,
     setTimeRangeFilter,
+    setDifficultyFilter,
   };
 
   // Initialize app
