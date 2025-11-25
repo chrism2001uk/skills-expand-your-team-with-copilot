@@ -1,4 +1,41 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Theme toggle functionality
+  const themeToggle = document.getElementById("theme-toggle");
+  const themeIcon = document.getElementById("theme-icon");
+  const htmlElement = document.documentElement;
+
+  // Check for saved theme preference or default to light
+  function getPreferredTheme() {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      return savedTheme;
+    }
+    // Check system preference
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+
+  // Apply theme to document
+  function applyTheme(theme) {
+    if (theme === "dark") {
+      htmlElement.setAttribute("data-theme", "dark");
+      themeIcon.textContent = "☀️";
+    } else {
+      htmlElement.removeAttribute("data-theme");
+      themeIcon.textContent = "🌙";
+    }
+  }
+
+  // Initialize theme
+  applyTheme(getPreferredTheme());
+
+  // Toggle theme on button click
+  themeToggle.addEventListener("click", () => {
+    const currentTheme = htmlElement.getAttribute("data-theme");
+    const newTheme = currentTheme === "dark" ? "light" : "dark";
+    localStorage.setItem("theme", newTheme);
+    applyTheme(newTheme);
+  });
+
   // DOM elements
   const activitiesList = document.getElementById("activities-list");
   const messageDiv = document.getElementById("message");
