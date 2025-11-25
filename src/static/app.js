@@ -278,6 +278,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Generate share URLs for social platforms
+  function getShareUrl(platform, activityName, description) {
+    const pageUrl = window.location.href;
+    const shareText = `Check out the ${activityName} activity at Mergington High School! ${description}`;
+    const encodedUrl = encodeURIComponent(pageUrl);
+    const encodedText = encodeURIComponent(shareText);
+
+    switch (platform) {
+      case "facebook":
+        return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
+      case "twitter":
+        return `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`;
+      case "email":
+        return `mailto:?subject=${encodeURIComponent(
+          `${activityName} at Mergington High School`
+        )}&body=${encodedText}%0A%0A${encodedUrl}`;
+      default:
+        return "#";
+    }
+  }
+
   // Format schedule for display - handles both old and new format
   function formatSchedule(details) {
     // If schedule_details is available, use the structured data
@@ -568,6 +589,28 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         `
         }
+      </div>
+      <div class="share-buttons">
+        <span class="share-label">Share:</span>
+        <a href="${getShareUrl("facebook", name, details.description)}" 
+           class="share-button share-facebook" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           title="Share on Facebook">
+          <span class="share-icon">f</span>
+        </a>
+        <a href="${getShareUrl("twitter", name, details.description)}" 
+           class="share-button share-twitter" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           title="Share on X (Twitter)">
+          <span class="share-icon">𝕏</span>
+        </a>
+        <a href="${getShareUrl("email", name, details.description)}" 
+           class="share-button share-email"
+           title="Share via Email">
+          <span class="share-icon">✉</span>
+        </a>
       </div>
     `;
 
