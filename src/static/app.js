@@ -287,9 +287,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     switch (platform) {
       case "facebook":
-        return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
+        return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
       case "twitter":
-        return `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`;
+        return `https://x.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`;
       case "email":
         return `mailto:?subject=${encodeURIComponent(
           `${activityName} at Mergington High School`
